@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Productividad MeliAir — Backhaul</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --yellow:#FFF8DC;--yellow-mid:#F5E97A;--yellow-dark:#E8D98A;--yellow-light:#FFFDF0;
+  --blue:#2C3E6B;--blue-dark:#1E2D52;--blue-deeper:#15203D;--blue-light:#EEF2FF;--blue-mid:#C5CFEA;
+  --dark:#1A1A2E;--text:#333;--gray:#717171;--gray-light:#F5F5F5;--border:#EBEBEB;--white:#fff;
+  --green:#2E7D5E;--green-light:#E8F5EE;
+}
+body{font-family:'Inter',sans-serif;background:#EDEAE3;color:var(--text);min-height:100vh}
+header{background:var(--yellow);height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--yellow-dark)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:20px;height:20px}
+.logo-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:17px;color:var(--blue-deeper)}
+.logo-sub{font-size:10px;font-weight:600;color:var(--blue-dark);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-lang{font-size:12px;font-weight:700;color:var(--blue-deeper);cursor:pointer;background:rgba(255,255,255,0.85);padding:5px 14px;border-radius:20px;border:1.5px solid var(--yellow-dark);transition:background .15s;user-select:none;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.btn-lang:hover{background:white}
+.btn-back{font-size:12px;font-weight:600;color:var(--blue-deeper);text-decoration:none;background:rgba(255,255,255,0.7);padding:4px 12px;border-radius:20px;border:1px solid var(--yellow-dark);transition:background .15s}
+.btn-back:hover{background:white}
+.badge{background:var(--blue);color:var(--yellow-mid);font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
+.hero{background:var(--yellow);padding:2.5rem 2rem 2rem;text-align:center;border-bottom:2px solid var(--yellow-dark)}
+.hero-tag{display:inline-block;background:var(--blue);color:var(--yellow-mid);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.hero-title-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.hero-ml-icon{width:46px;height:46px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-ml-icon svg{width:26px;height:26px}
+.hero h1{font-family:'Raleway',sans-serif;font-size:clamp(20px,3vw,32px);font-weight:800;color:var(--blue-deeper);letter-spacing:-0.8px;line-height:1.2}
+.hero p{font-size:14px;color:var(--blue-dark);opacity:.8;max-width:640px;margin:8px auto 0;line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.layout{display:grid;grid-template-columns:1fr 460px;gap:20px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.card{background:var(--white);border-radius:12px;border:1px solid var(--border)}
+.card+.card{margin-top:16px}
+.card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-icon{width:32px;height:32px;background:var(--yellow-light);border:1px solid var(--yellow-dark);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.card-header h2{font-family:'Raleway',sans-serif;font-size:14px;font-weight:700;color:var(--dark)}
+.card-header p{font-size:11px;color:var(--gray);margin-top:1px}
+.card-body{padding:1.25rem}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;margin-top:4px}
+.divider{border:none;border-top:1px solid var(--border);margin:.9rem 0}
+.field{margin-bottom:.9rem}.field:last-child{margin-bottom:0}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px}
+label .hint{font-weight:400;color:var(--gray)}
+input[type="number"]{width:100%;height:38px;border:1.5px solid var(--border);border-radius:8px;padding:0 10px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:var(--white);outline:none;transition:border-color .15s}
+input[type="number"]:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(44,62,107,.1)}
+.results-sticky{position:sticky;top:76px}
+.result-header{background:var(--blue);padding:1.25rem 1.5rem;border-radius:12px 12px 0 0}
+.result-header .r-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
+.result-header .r-title{font-family:'Raleway',sans-serif;font-size:15px;font-weight:700;color:var(--yellow-mid)}
+.res-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:.9rem 1.25rem;border-bottom:1px solid var(--border)}
+.kpi{background:var(--gray-light);border-radius:8px;padding:9px 10px;text-align:center}
+.kpi.hl{background:var(--blue)}
+.kpi-val{font-family:'Raleway',sans-serif;font-size:22px;font-weight:800;color:var(--blue);line-height:1}
+.kpi.hl .kpi-val{color:var(--yellow-mid)}
+.kpi-lbl{font-size:9px;color:var(--gray);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.kpi.hl .kpi-lbl{color:rgba(255,255,255,.6)}
+.res-table-wrap{padding:.75rem 1.25rem;overflow-x:auto}
+.res-table{width:100%;border-collapse:collapse;font-size:11px}
+.res-table th{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:5px 6px;border-bottom:2px solid var(--border);text-align:right;white-space:nowrap}
+.res-table th:first-child{text-align:left}
+.res-table td{padding:6px 6px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text)}
+.res-table td:first-child{font-weight:600;color:var(--dark);font-size:11px}
+.res-table td:not(:first-child){text-align:right;font-family:'Raleway',sans-serif;font-size:12px;font-weight:700}
+.res-table tr:last-child td{border-bottom:none}
+.res-table tr.group-hdr td{background:var(--blue);font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--yellow-mid);padding:5px 6px;font-family:'Inter',sans-serif}
+.res-table tr.sub-hdr td{background:var(--gray-light);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);padding:4px 6px;font-family:'Inter',sans-serif;font-style:italic}
+.res-table tr:hover td{background:var(--blue-light)}
+.res-table tr.group-hdr:hover td,.res-table tr.sub-hdr:hover td{background:inherit}
+.empty-state{padding:2.5rem 1.5rem;text-align:center;color:var(--gray)}
+.empty-icon{font-size:32px;margin-bottom:10px}
+.empty-state p{font-size:13px;line-height:1.6}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fadeUp .22s ease forwards}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6.5" r="3.5" fill="#F5E97A"/><path d="M2.5 17.5c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="#F5E97A" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+    <div><div class="logo-name">Mercado Livre</div><div class="logo-sub" data-es="Herramientas Internas" data-pt="Ferramentas Internas">Ferramentas Internas</div></div>
+  </a>
+  <div class="header-right">
+    <a class="btn-back" href="https://mtmtransportes-meliairbackhaulpt.vercel.app/">← Voltar</a>
+    <a class="btn-lang" href="https://mtmtransportes-meliairbackhaulbres.vercel.app/"><small style="font-size:9px;font-weight:800;letter-spacing:.5px;opacity:.7">MX</small> Español</a>
+    <span class="badge" data-es="MTM — Productividad MeliAir · Backhaul" data-pt="MTM — Produtividade MeliAir · Backhaul">MTM — Produtividade MeliAir · Backhaul</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag" data-es="Productividad Operacional · MeliAir · 🇧🇷 Brasil" data-pt="Produtividade Operacional · MeliAir · 🇧🇷 Brasil">Produtividade Operacional · MeliAir · 🇧🇷 Brasil</div>
+  <div class="hero-title-wrap">
+    <div class="hero-ml-icon">
+      <svg viewBox="0 0 26 26" fill="none">
+        <path d="M23 13 L3 13" stroke="#F5E97A" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 6 L3 13 L12 20" stroke="#F5E97A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 9 L15 13 L18 17" stroke="#F5E97A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 data-es="Calculadora de Productividad MeliAir — Backhaul" data-pt="Calculadora de Produtividade MeliAir — Backhaul">Calculadora de Produtividade MeliAir — Backhaul</h1>
+  </div>
+  <p data-es="Completa los datos operacionales. La calculadora muestra la productividad MTM esperada (pcts/hh por puesto) para cada subproceso: descarga de carrito, desarme de láminas, autoelevador y carga de camión."
+     data-pt="Preencha os dados operacionais. A calculadora mostra a produtividade MTM esperada (pcts/hh por posto) para cada subprocesso: descarga do carrinho, desmontagem de lâminas, empilhadeira e carregamento do caminhão.">
+     Preencha os dados operacionais. A calculadora mostra a produtividade MTM esperada (pcts/hh por posto) para cada subprocesso: descarga do carrinho, desmontagem de lâminas, empilhadeira e carregamento do caminhão.
+  </p>
+</div>
+
+<div class="container">
+<div class="layout">
+
+<!-- ═══ ESQUERDA: inputs ═══ -->
+<div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <div>
+        <h2 data-es="Datos de Operación" data-pt="Dados de Operação">Dados de Operação</h2>
+        <p data-es="Parámetros del ciclo Backhaul (MLB) — descarga de avión a camión"
+           data-pt="Parâmetros do ciclo Backhaul (MLB) — descarga do avião para o caminhão">Parâmetros do ciclo Backhaul (MLB) — descarga do avião para o caminhão</p>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <div class="sec-label" data-es="Volumen" data-pt="Volume">Volume</div>
+      <div class="field">
+        <label data-es="Paquetes por camión <span class='hint'>(pcts)</span>"
+               data-pt="Pacotes por caminhão <span class='hint'>(pcts)</span>">Pacotes por caminhão <span class="hint">(pcts)</span></label>
+        <input type="number" id="Q4" min="100" placeholder="ex. 3000" oninput="calcular()">
+      </div>
+
+      <hr class="divider">
+
+      <div class="sec-label" data-es="Distancias de Operación (metros)" data-pt="Distâncias de Operação (metros)">Distâncias de Operação (metros)</div>
+      <div class="field">
+        <label data-es="Distancia de docas a Buffer <span class='hint'>(m)</span>"
+               data-pt="Distância das docas ao Buffer <span class='hint'>(m)</span>">Distância das docas ao Buffer <span class="hint">(m)</span></label>
+        <input type="number" id="Q5" min="0" placeholder="ex. 50" oninput="calcular()">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label data-es="Dist. armado de mangas → buffer apilamiento <span class='hint'>(m)</span>"
+                 data-pt="Dist. montagem de mangas → buffer empilhamento <span class='hint'>(m)</span>">Dist. montagem de mangas → buffer empilhamento <span class="hint">(m)</span></label>
+          <input type="number" id="Q6" min="0" placeholder="ex. 10" oninput="calcular()">
+        </div>
+        <div class="field">
+          <label data-es="Dist. buffer de pilas → buffer de despacho <span class='hint'>(m)</span>"
+                 data-pt="Dist. buffer de pilhas → buffer de expedição <span class='hint'>(m)</span>">Dist. buffer de pilhas → buffer de expedição <span class="hint">(m)</span></label>
+          <input type="number" id="Q7" min="0" placeholder="ex. 20" oninput="calcular()">
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="sec-label" data-es="SPP — Unidades de Carga (pcts/unidad)" data-pt="SPP — Unidades de Carga (pcts/unidade)">SPP — Unidades de Carga (pcts/unidade)</div>
+      <div class="field-row">
+        <div class="field">
+          <label data-es="SPP Manga Air <span class='hint'>(pcts/manga)</span>"
+                 data-pt="SPP Manga Air <span class='hint'>(pcts/manga)</span>">SPP Manga Air <span class="hint">(pcts/manga)</span></label>
+          <input type="number" id="Q8" min="1" placeholder="ex. 258" oninput="calcular()">
+        </div>
+        <div class="field">
+          <label data-es="SPP Manga Pallet <span class='hint'>(pcts/manga)</span>"
+                 data-pt="SPP Manga Pallet <span class='hint'>(pcts/manga)</span>">SPP Manga Pallet <span class="hint">(pcts/manga)</span></label>
+          <input type="number" id="Q9" min="1" placeholder="ex. 70" oninput="calcular()">
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="sec-label" data-es="SPP — Láminas completas (pcts/lámina total)" data-pt="SPP — Lâminas completas (pcts/lâmina total)">SPP — Lâminas completas (pcts/lâmina total)</div>
+      <div class="field-row">
+        <div class="field">
+          <label data-es="SPP sobre Gaylord <span class='hint'>(pcts/lám)</span>"
+                 data-pt="SPP sobre Gaylord <span class='hint'>(pcts/lâm)</span>">SPP sobre Gaylord <span class="hint">(pcts/lâm)</span></label>
+          <input type="number" id="Q10" min="1" placeholder="ex. 150" oninput="calcular()">
+        </div>
+        <div class="field">
+          <label data-es="SPP sobre Manga Air <span class='hint'>(pcts/lám)</span>"
+                 data-pt="SPP sobre Manga Air <span class='hint'>(pcts/lâm)</span>">SPP sobre Manga Air <span class="hint">(pcts/lâm)</span></label>
+          <input type="number" id="Q11" min="1" placeholder="ex. 100" oninput="calcular()">
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="sec-label" data-es="SPP — Carrito" data-pt="SPP — Carrinho">SPP — Carrinho</div>
+      <div class="field">
+        <label data-es="SPP Carrito <span class='hint'>(pcts/carrito)</span>"
+               data-pt="SPP Carrinho <span class='hint'>(pcts/carrinho)</span>">SPP Carrinho <span class="hint">(pcts/carrinho)</span></label>
+        <input type="number" id="Q12" min="1" placeholder="ex. 600" oninput="calcular()">
+      </div>
+
+    </div>
+  </div>
+</div><!-- /left -->
+
+<!-- ═══ DIREITA: resultados ═══ -->
+<div class="results-sticky">
+  <div class="card">
+    <div class="result-header">
+      <div class="r-label" data-es="Productividad por Subproceso" data-pt="Produtividade por Subprocesso">Produtividade por Subprocesso</div>
+      <div class="r-title">MeliAir — Backhaul</div>
+    </div>
+    <div class="res-kpis">
+      <div class="kpi hl">
+        <div class="kpi-val" id="kpiCapArriba">—</div>
+        <div class="kpi-lbl" data-es="Carrito/hh (persona arriba)" data-pt="Carrinho/hh (pessoa em cima)">Carrinho/hh (pessoa em cima)</div>
+      </div>
+      <div class="kpi hl">
+        <div class="kpi-val" id="kpiCapAbajo">—</div>
+        <div class="kpi-lbl" data-es="Carrito/hh (persona abajo)" data-pt="Carrinho/hh (pessoa embaixo)">Carrinho/hh (pessoa embaixo)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val" id="kpiPctsArriba">—</div>
+        <div class="kpi-lbl" data-es="Pcts/hh descarga arriba" data-pt="Pcts/hh descarga em cima">Pcts/hh descarga em cima</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val" id="kpiPctsAbajo">—</div>
+        <div class="kpi-lbl" data-es="Pcts/hh descarga abajo" data-pt="Pcts/hh descarga embaixo">Pcts/hh descarga embaixo</div>
+      </div>
+    </div>
+    <div class="res-table-wrap">
+      <div id="tableContainer">
+        <div class="empty-state">
+          <div class="empty-icon">📊</div>
+          <p data-es="Completa los datos operacionales para ver la productividad de cada subproceso."
+             data-pt="Preencha os dados operacionais para ver a produtividade de cada subprocesso.">
+             Preencha os dados operacionais para ver a produtividade de cada subprocesso.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   CALCULADORA BACKHAUL — fórmulas fiéis à aba "CALCULADORA DE PRODUCTIVIDAD ML"
+
+   INPUTS  (coluna Q da planilha):
+     Q4  = ppcam        Paquetes por camión
+     Q5  = dist_docas   Distância docas → buffer                   (ref: 50 m)
+     Q6  = dist_armado  Distância armado mangas → buffer apilam.   (ref: 10 m)
+     Q7  = dist_pilas   Distância buffer pilas → buffer despacho   (ref: 20 m)
+     Q8  = spp_MA       SPP Manga Air           (ref: 258 pcts/manga)
+     Q9  = spp_MP       SPP Manga Pallet        (ref:  70 pcts/manga)
+     Q10 = spp_GY       SPP sobre Gaylord       (ref: 150 pcts/lám)
+     Q11 = spp_ML       SPP sobre Manga Air     (ref: 100 pcts/lám)
+     Q12 = spp_C        SPP Carrito             (ref: 600 pcts/carrito)
+
+   CAPS FIJOS (não dependem de distâncias):
+     B12 = 1.069161948  carrito/hh  — Productividad rep sobre carrito
+     C12 = 1.483644305  carrito/hh  — Productividad rep bajo carrito
+     D12 = 22.32142857  lámina/hh   — Productividad desarme lámina
+     M12 = 1.975697342  cam/hh      — Productividad rep dentro de camión (fixo)
+
+   CAPS DINÂMICOS (dependem de distâncias — âncora em valores de referência):
+     N12 (Productividad de carga de camión):
+         3600 / ((totalRef_N + 0.36*(Q5−50)) * 24 * 1.12)
+         totalRef_N = 3600 / (N12_ref * 26.88)
+
+     L12 (Productividad autoelevador / Alcance pila):
+         3600 / ((totalRef_L + 0.36*(Q5−50)) * 24 * 1.12)
+         totalRef_L = 3600 / (L12_ref * 26.88)
+
+     J12 (Productividad de apilamiento de mangas):
+         3600 / ((totalRef_J + 3.24*(Q6−10)) * 1.12)
+         totalRef_J = 3600 / (J12_ref * 1.12)
+
+     K12 (Productividad de carga de Stage out):
+         3600 / ((totalRef_K + 1.08*(Q7−20)) * 1.12)
+         totalRef_K = 3600 / (K12_ref * 1.12)
+
+     I12 (Productividad descarga Manga Air + Manga Pallet):
+         3600 / ((totalRef_I + 1.08*(Q7−20)) * 1.12)
+         totalRef_I = 3600 / (I12_ref * 1.12)
+
+   PCTS/HH (linha 14 da planilha):
+     B14 = B12 * Q12
+     C14 = C12 * Q12
+     D14 = '-'
+     E14 = 612.7000466  (MTM fixo — DESARME!E19)
+     F14 = 3600/((F46_FIXED + 25.56/Q9)*1.12)  ← DINÂMICO via Q9 (DESARME!E46)
+     G14 = 702.3458351  (MTM fixo — DESARME!E33)
+     H14 = F14          ← DINÂMICO, igual a F14 (mesmo DESARME!E46)
+     I14 = '-'
+     J14 = J12 * Q9 * 3
+     K14 = K12 * 3 * Q8
+     L14 = L12 * 24 * 3 * Q9
+     M14 = M12 * 24 * 3 * Q9
+     N14 = N12 * 24 * Q10
+
+   F46_FIXED: parte fixa de SUM(F48:F55) no DESARME (sem os termos /Q9)
+     F46_FIXED = 3600/(F14_REF*1.12) - 25.56/Q9_REF
+     onde 25.56 = (535+175)*0.036  (linhas F54+F55 do DESARME)
+
+   LÁM/HH (linha 12 derivados):
+     E12 = E14 / Q10
+     F12 = F14 / Q10  ← muda com Q9 e Q10
+     G12 = G14 / Q11
+     H12 = H14 / Q11  ← muda com Q9 e Q11
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Valores de referência dos inputs (planilha) ── */
+var Q9_REF = 70;
+
+/* ── Caps FIXOS (não dependem de nenhum input) ── */
+var D12_REF = 22.32142857;       // DESARME!H2
+var M12_REF = 1.975697342;       // AUTOELEVADOR!E126  — sem dep. de distância
+var E14_MTM = 612.7000466;       // DESARME!E19        — fixo
+var G14_MTM = 702.3458351;       // DESARME!E33        — fixo
+
+/* ── F14 / H14: DINÂMICOS via Q9 (DESARME!E46) ──
+   F46 = (F46_FIXED + 25.56/Q9) * 1.12
+   E46 = 3600/F46  →  F14 = H14 = E46
+   Onde 25.56 = (535+175)*0.036  (linhas F54+F55 do DESARME ÷ Q9)
+   F46_FIXED = 3600/(F14_REF*1.12) - 25.56/Q9_REF              */
+var F14_REF   = 791.9851107;
+var F46_FIXED = 3600 / (F14_REF * 1.12) - 25.56 / Q9_REF;  // ≈ 3.6934
+
+/* ── B12/C12: DINÂMICOS via Q12 (DESCARGA DE CARRITO) ──
+   SPR col C = J2*0.7 = Q12*0.7 → G col proporcional a Q12
+   B12 = 3600 / ((FIXED_B + COEF_B*Q12) * 1.12)
+   C12 = 3600 / ((FIXED_C + COEF_C*Q12) * 1.12)
+   Derivados de: SUM(G4:G20)=FIXED_B+COEF_B*Q12 e SUM(G25:G44)=FIXED_C+COEF_C*Q12 ── */
+var FIXED_B = 30.96,    COEF_B = 4.959;
+var FIXED_C = 71.28,    COEF_C = 3.492;
+
+/* ── Caps DINÂMICOS do AUTOELEVADOR ──
+   Cada cap: 3600 / ((FIXED + COEF*Q) * mult)
+   COEF = Σ MTM_val × D_factor × C_freq por linha que depende de Q
+   Para N12 e L12: linhas corto(D=Q5/4, C=1/3), medio(D=Q5/2, C=1/3), largo(D=Q5, C=1/3)
+     SFILF×(1/4+1/2+1)×(1/3) + SFISF×(1/4+1/2+1)×(1/3)
+     = (0.612+0.468)×(7/4)×(1/3) = 1.08×(7/12) = 0.63 s/m
+
+   N12 (AUTOELEVADOR!E2,  F2 =SUM(F4:F37) ×24×1.12):  FIXED_N=37.4217  COEF=0.63
+   L12 (AUTOELEVADOR!E40, F40=SUM(F42:F64)×24×1.12):  FIXED_L=21.4257  COEF=0.63
+   J12 (Apilar mangas):       Q6, mult=1.12    FIXED_J=185.542  COEF=3.24
+   K12 (Stage out carga):     Q7, mult=1.12    FIXED_K=41.69    COEF=1.08
+   I12 (Descarga Manga Air+Pallet): Q7, mult=1.12  FIXED_I=31.752  COEF=1.08  ── */
+var FIXED_N = 37.42166655, COEF_N5 = 0.63;
+var FIXED_L = 21.42566655, COEF_L5 = 0.63;
+var FIXED_J = 185.542,     COEF_J6 = 3.24;
+var FIXED_K = 41.69,       COEF_K7 = 1.08;
+var FIXED_I = 31.752,      COEF_I7 = 1.08;
+
+/* ── Helpers ── */
+function g(id){ return parseFloat(document.getElementById(id).value); }
+function ok(x){ return !isNaN(x) && isFinite(x) && x > 0; }
+function locale(){ return LANG === 'pt' ? 'pt-BR' : 'es-MX'; }
+function fmt(x){ return (x != null && ok(x)) ? Math.round(x).toLocaleString(locale()) : '—'; }
+function fmt2(x){ return (x != null && ok(x)) ? x.toLocaleString(locale(), {minimumFractionDigits:2, maximumFractionDigits:2}) : '—'; }
+function fmt3(x){ return (x != null && ok(x)) ? x.toLocaleString(locale(), {minimumFractionDigits:2, maximumFractionDigits:2}) : '—'; }
+
+/* ── Cap dinâmico: 3600 / ((fixed + coef*Q) * mult) ── */
+function capDin(fixed, Q, coef, mult) {
+  var total = fixed + coef * Q;
+  return total > 0 ? 3600 / (total * mult) : 0;
+}
+
+/* ── Idioma: página fixa em PT ── */
+var LANG = 'pt';
+
+var TXT = {
+  es: {
+    grpDescarga: '📦  Descarga de Carrito',
+    grpDesarme:  '🔧  Desarme de Láminas',
+    grpAuto:     '🤖  Autoelevador',
+    grpCarga:    '🚛  Carga de Camión',
+    subDesarmeApertura: 'Apertura de lámina',
+    subDesarmeGaylord:  'Gaylord',
+    subDesarmeManga:    'Manga',
+    subAutoDesc:  'Descarga de Manga Air + Manga Pallet',
+    subAutoApil:  'Apilar mangas',
+    subAutoStage: 'Stage Out',
+    subCargaAlcance:   'Alcance de la pila de mangas pallets',
+    subCargaAcomo:     'Acomodar mangas pallets dentro de camión',
+    subCargaGaylord:   'Carga de gaylords + manga air',
+    // row 10 names
+    B: 'Productividad rep sobre carrito',
+    C: 'Productividad rep bajo carrito',
+    D: 'Productividad desarme lámina',
+    E: 'Productividad rep sobre lámina',
+    F: 'Productividad rep debajo lámina',
+    G: 'Productividad rep sobre lámina',
+    H: 'Productividad rep debajo lámina',
+    I: 'Productividad descarga',
+    J: 'Productividad de apilamiento de mangas',
+    K: 'Productividad de carga de Stage out',
+    L: 'Productividad autoelevador',
+    M: 'Productividad rep dentro de camión',
+    N: 'Productividad de carga de camión',
+    // table headers
+    thSubp: 'Subproceso', thCap: 'Capacidad', thPcts: 'Pcts/hh'
+  },
+  pt: {
+    grpDescarga: '📦  Descarga do Carrinho',
+    grpDesarme:  '🔧  Desmontagem de Lâminas',
+    grpAuto:     '🤖  Empilhadeira',
+    grpCarga:    '🚛  Carregamento do Caminhão',
+    subDesarmeApertura: 'Abertura de lâmina',
+    subDesarmeGaylord:  'Gaylord',
+    subDesarmeManga:    'Manga',
+    subAutoDesc:  'Descarga de Manga Air + Manga Pallet',
+    subAutoApil:  'Empilhamento de mangas',
+    subAutoStage: 'Stage Out',
+    subCargaAlcance:   'Alcance da pilha de mangas pallets',
+    subCargaAcomo:     'Acomodar mangas pallets dentro do caminhão',
+    subCargaGaylord:   'Carga de gaylords + manga air',
+    // row 10 names
+    B: 'Produtividade rep sobre carrinho',
+    C: 'Produtividade rep abaixo carrinho',
+    D: 'Produtividade desmontagem lâmina',
+    E: 'Produtividade rep sobre lâmina',
+    F: 'Produtividade rep abaixo lâmina',
+    G: 'Produtividade rep sobre lâmina',
+    H: 'Produtividade rep abaixo lâmina',
+    I: 'Produtividade descarga',
+    J: 'Produtividade de empilhamento de mangas',
+    K: 'Produtividade de carga do Stage out',
+    L: 'Produtividade empilhadeira',
+    M: 'Produtividade rep dentro do caminhão',
+    N: 'Produtividade de carga do caminhão',
+    // table headers
+    thSubp: 'Subprocesso', thCap: 'Capacidade', thPcts: 'Pcts/hh'
+  }
+};
+
+/* ── Cálculo principal ── */
+function calcular(){
+  var t = TXT[LANG];
+
+  var Q4  = g('Q4');
+  var Q5  = g('Q5');
+  var Q6  = g('Q6');
+  var Q7  = g('Q7');
+  var Q8  = g('Q8');
+  var Q9  = g('Q9');
+  var Q10 = g('Q10');
+  var Q11 = g('Q11');
+  var Q12 = g('Q12');
+
+  /* Guard: precisamos de pelo menos um input para mostrar resultados */
+  var temAlgumInput = ok(Q12) || ok(Q8) || ok(Q9) || ok(Q10) || ok(Q11)
+                   || ok(Q5) || ok(Q6) || ok(Q7);
+  if(!temAlgumInput) return;
+
+  /* ── Caps FIXOS ── */
+  var D12 = D12_REF;
+  var M12 = M12_REF;
+
+  /* ── B12/C12: dependem de Q12 (SPR col C = J2×0.7 no DESCARGA) ── */
+  var B12 = null, C12 = null;
+  if(ok(Q12)) {
+    B12 = 3600 / ((FIXED_B + COEF_B * Q12) * 1.12);
+    C12 = 3600 / ((FIXED_C + COEF_C * Q12) * 1.12);
+  }
+
+  /* ── Caps DINÂMICOS do AUTOELEVADOR ──
+     Se distância não preenchida, a calculadora deixa resultado como null para essa linha
+     (não usa valor padrão silencioso — o usuário precisa preencher) ── */
+  var N12 = ok(Q5) ? capDin(FIXED_N, Q5, COEF_N5, 24*1.12) : null;
+  var L12 = ok(Q5) ? capDin(FIXED_L, Q5, COEF_L5, 24*1.12) : null;
+  var J12 = ok(Q6) ? capDin(FIXED_J, Q6, COEF_J6, 1.12)    : null;
+  var K12 = ok(Q7) ? capDin(FIXED_K, Q7, COEF_K7, 1.12)    : null;
+  var I12 = ok(Q7) ? capDin(FIXED_I, Q7, COEF_I7, 1.12)    : null;
+
+  /* ── Pcts/hh — linha 14 da planilha ── */
+  /* B14 = B12 × Q12  (B12 já depende de Q12, então B14 ≠ B12_fixed×Q12) */
+  var B14 = (B12 && ok(Q12)) ? B12 * Q12 : null;
+  var C14 = (C12 && ok(Q12)) ? C12 * Q12 : null;
+  /* D14 = '-' */
+  var E14 = E14_MTM;                         // DESARME!E19 — fixo
+  var F14 = ok(Q9) ? 3600 / ((F46_FIXED + 25.56/Q9) * 1.12) : null;  // DESARME!E46
+  var G14 = G14_MTM;                         // DESARME!E33 — fixo
+  var H14 = F14;                             // = F14 (mesmo DESARME!E46)
+  /* I14 = '-' */
+  var J14 = (J12 && ok(Q9))  ? J12 * Q9  * 3       : null;
+  var K14 = (K12 && ok(Q8))  ? K12 * 3   * Q8      : null;
+  var L14 = (L12 && ok(Q9))  ? L12 * 24  * 3 * Q9  : null;
+  var M14 = ok(Q9)            ? M12 * 24  * 3 * Q9  : null;
+  var N14 = (N12 && ok(Q10)) ? N12 * 24  * Q10     : null;
+
+  /* ── Lâm/hh derivados — linha 12 ── */
+  var E12 = ok(Q10)               ? E14 / Q10 : null;
+  var F12 = (F14 && ok(Q10))      ? F14 / Q10 : null;
+  var G12 = ok(Q11)               ? G14 / Q11 : null;
+  var H12 = (H14 && ok(Q11))      ? H14 / Q11 : null;
+
+  /* KPIs */
+  document.getElementById('kpiCapArriba').textContent  = fmt2(B12);
+  document.getElementById('kpiCapAbajo').textContent   = fmt2(C12);
+  document.getElementById('kpiPctsArriba').textContent = B14 != null ? fmt(B14) : '—';
+  document.getElementById('kpiPctsAbajo').textContent  = C14 != null ? fmt(C14) : '—';
+
+  /* Unidade de taxa */
+  var U = LANG === 'pt' ? 'carr/hh' : 'carrito/hh';
+
+  /* Tabela — grupos de rows 4/5 com nomes de row 10 */
+  /* Unidades de lâm/hh para o AUTOELEVADOR */
+  var UP = LANG === 'pt' ? 'pilas/hh' : 'pilas/hh';
+  var UC = LANG === 'pt' ? 'cam/hh'   : 'cam/hh';
+
+  var grupos = [
+    { grp: t.grpDescarga, sub: null, rows: [
+        { nome: t.B, rate: B12 ? fmt2(B12)+' '+U : '—',        ph: B14 },
+        { nome: t.C, rate: C12 ? fmt2(C12)+' '+U : '—',        ph: C14 }
+    ]},
+    { grp: t.grpDesarme, sub: t.subDesarmeApertura, rows: [
+        { nome: t.D, rate: fmt2(D12)+' lám/hh',                ph: null }
+    ]},
+    { grp: t.grpDesarme, sub: t.subDesarmeGaylord, rows: [
+        { nome: t.E, rate: E12 ? fmt2(E12)+' lám/hh' : '—',   ph: E14 },
+        { nome: t.F, rate: F12 ? fmt2(F12)+' lám/hh' : '—',   ph: F14 }
+    ]},
+    { grp: t.grpDesarme, sub: t.subDesarmeManga, rows: [
+        { nome: t.G, rate: G12 ? fmt2(G12)+' lám/hh' : '—',   ph: G14 },
+        { nome: t.H, rate: H12 ? fmt2(H12)+' lám/hh' : '—',   ph: H14 }
+    ]},
+    { grp: t.grpAuto, sub: t.subAutoDesc, rows: [
+        { nome: t.I, rate: I12 ? fmt3(I12)+' '+UP : '—',      ph: null }
+    ]},
+    { grp: t.grpAuto, sub: t.subAutoApil, rows: [
+        { nome: t.J, rate: J12 ? fmt3(J12)+' '+UP : '—',      ph: J14 }
+    ]},
+    { grp: t.grpAuto, sub: t.subAutoStage, rows: [
+        { nome: t.K, rate: K12 ? fmt2(K12)+' '+UP : '—',      ph: K14 }
+    ]},
+    { grp: t.grpCarga, sub: t.subCargaAlcance, rows: [
+        { nome: t.L, rate: L12 ? fmt3(L12)+' '+UC : '—',      ph: L14 }
+    ]},
+    { grp: t.grpCarga, sub: t.subCargaAcomo, rows: [
+        { nome: t.M, rate: fmt3(M12)+' '+UC,                   ph: M14 }
+    ]},
+    { grp: t.grpCarga, sub: t.subCargaGaylord, rows: [
+        { nome: t.N, rate: N12 ? fmt3(N12)+' '+UC : '—',      ph: N14 }
+    ]}
+  ];
+
+  var html = '<table class="res-table animate"><thead><tr>';
+  html += '<th>'+t.thSubp+'</th><th>'+t.thCap+'</th><th>'+t.thPcts+'</th>';
+  html += '</tr></thead><tbody>';
+
+  var lastGrp = null;
+  grupos.forEach(function(g){
+    if(g.grp !== lastGrp){
+      html += '<tr class="group-hdr"><td colspan="3">'+g.grp+'</td></tr>';
+      lastGrp = g.grp;
+    }
+    if(g.sub){
+      html += '<tr class="sub-hdr"><td colspan="3">↳ '+g.sub+'</td></tr>';
+    }
+    g.rows.forEach(function(r){
+      html += '<tr>';
+      html += '<td>'+r.nome+'</td>';
+      html += '<td style="text-align:right;font-size:11px;color:var(--gray)">'+r.rate+'</td>';
+      html += '<td>'+(r.ph == null ? '—' : fmt(r.ph))+'</td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('tableContainer').innerHTML = html;
+}
+
+window.addEventListener('load', calcular);
+</script>
+</body>
+</html>
